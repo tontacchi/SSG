@@ -1,17 +1,17 @@
 from enum import Enum
 
 class TextType(Enum):
-    NORMAL_TEXT = "normal"
-    BOLD_TEXT   = "bold"
-    ITALIC_TEXT = "italic"
-    CODE_TEXT   = "code"
-    LINK_TEXT   = "link"
-    IMAGE_TEXT  = "image"
+    TEXT   = "text"
+    BOLD   = "bold"
+    ITALIC = "italic"
+    CODE   = "code"
+    LINK   = "link"
+    IMAGE  = "image"
 
 class TextNode:
     def __init__(self,
         text: str="",
-        text_type: TextType=TextType.NORMAL_TEXT,
+        text_type: TextType=TextType.TEXT,
         url: str | None=None
     ) -> None:
         self.text      = text
@@ -25,7 +25,7 @@ class TextNode:
             return False
         if self.text_type.value != other.text_type.value:
             return False
-        if self.url != self.url:
+        if self.url != other.url:
             return False
 
         return True
