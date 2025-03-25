@@ -25,7 +25,7 @@ class TextNode:
             return False
         if self.text_type.value != other.text_type.value:
             return False
-        if self.url != self.url:
+        if self.url != other.url:
             return False
 
         return True
