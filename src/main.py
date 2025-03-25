@@ -1,5 +1,6 @@
 #---[ Global Imports ]----------------------------------------------------------
 from textnode import TextNode, TextType
+from htmlnode import HTMLNode
 
 #---[ Global Imports ]----------------------------------------------------------
 
@@ -19,14 +20,16 @@ def main():
     # print(node == normal_node_1)
     # print(node == normal_node_2)
 
-    node1 = TextNode("link 1", TextType.LINK_TEXT, "https://example.com")
-    node2 = TextNode("link 1", TextType.LINK_TEXT)
+    # node1 = TextNode("link 1", TextType.LINK_TEXT, "https://example.com")
+    # node2 = TextNode("link 1", TextType.LINK_TEXT)
+    #
+    # print(node1 == node2)
 
-    print(node1 == node2)
 
     return
 
 #---[ Main Function ]-----------------------------------------------------------
+
 
 
 #---[ Entry ]-------------------------------------------------------------------
