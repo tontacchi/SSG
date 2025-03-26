@@ -16,6 +16,21 @@ class TestLeafNode(unittest.TestCase):
 
         return
 
+    def test_leaf_img(self) -> None:
+        print("[ test ] LeafNode <img> to_html() normal flow")
+
+        sample_props = {
+            "src": "https://img-loc.com",
+            "alt": "alt text"
+        }
+        node = LeafNode("img", "unused", sample_props)
+
+        expected_value = '<img src="https://img-loc.com" alt="alt text" />'
+
+        self.assertEqual(node.to_html(), expected_value)
+
+        return
+
     def test_leaf_raises_value_error(self) -> None:
         print("[ test ] LeafNode to_html() ValueError flow: missing value")
 

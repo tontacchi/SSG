@@ -126,6 +126,22 @@ class TestParentNode(unittest.TestCase):
 
         return
 
+    def test_img_child(self) -> None:
+        print("[ test ] ParentNode has <img> child")
+
+        sample_props = {
+            "src": "https://img-loc.com",
+            "alt": "alt text"
+        }
+        img_node = LeafNode("img", "unused", sample_props)
+        parent_node = ParentNode("p", [img_node], {"style": "color: #ffffff"})
+
+        expected_result = '<p style="color: #ffffff"><img src="https://img-loc.com" alt="alt text" /></p>'
+
+        self.assertEqual(parent_node.to_html(), expected_result)
+
+        return
+
 if __name__ == "__main__":
     unittest.main()
 
