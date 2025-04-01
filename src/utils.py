@@ -182,19 +182,33 @@ def split_nodes_link(old_nodes: list[TextNode]) -> list[TextNode]:
 
     return new_nodes
 
+def text_to_textnodes(text: str) -> list[TextNode]:
+    type_delimiter_map = {
+        TextType.BOLD: "**",
+        TextType.ITALIC: "_",
+        TextType.CODE: "`"
+    }
+
+    node = TextNode(text)
+    node_list = [node]
+
+    for text_type, delimiter in type_delimiter_map.items():
+        node_list = split_nodes_delimiter(node_list, delimiter, text_type)
+
+    node_list = split_nodes_image(node_list)
+    node_list = split_nodes_link(node_list)
+
+    return node_list
+
 def test():
     # test1 = TextNode("image ![middle image](https)middle")
     # test2 = TextNode("![starting image](https) image start")
     # test3 = TextNode("image end ![starting image](https)")
     # test4 = TextNode("here is a kitty: ![kitty placeholder](https://cat-image.com), and another one: ![some cat](https://hotmail.com)b")
     # test5 = TextNode("![raw image](byitself)")
-    node = TextNode(
-        "This is text with an [image](https://i.imgur.com/zjjcJKZ.png) and another [second image](https://i.imgur.com/3elNhQu.png)",
-        TextType.TEXT,
-    )
-    new_nodes = split_nodes_link([node])
+    res = text_to_textnodes("This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)")
 
-    for node in new_nodes:
+    for node in res:
         print(node)
 
     return
