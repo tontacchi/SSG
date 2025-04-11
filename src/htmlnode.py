@@ -17,8 +17,11 @@ class HTMLNode:
         raise NotImplementedError
 
     def props_to_html(self) -> str:
-        if not self.props:
-            return ""
+        '''
+        this method generates the string for the props inside the opening tag
+        - it even does the starting space for you!
+        '''
+        if not self.props: return ""
 
         res = ""
         for attr, value in self.props.items():

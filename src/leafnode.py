@@ -11,7 +11,10 @@ class LeafNode(HTMLNode):
         return
 
     def to_html(self) -> str:
-        if not self.value:
+        '''
+        generates the html string
+        '''
+        if self.value == None:
             raise ValueError("Error: All leaf nodes must have a value")
         
         # case 1: no tag
@@ -31,3 +34,10 @@ class LeafNode(HTMLNode):
 
         return res
 
+    def __repr__(self) -> str:
+        res = "LeafNode(\n"
+        res += f"    tag:   {self.tag}\n"
+        res += f"    value: {self.value}\n"
+        res += f"    props: {self.props}\n"
+        return res + ")"
+    
