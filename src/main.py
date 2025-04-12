@@ -1,5 +1,6 @@
 #---[ Global Imports ]----------------------------------------------------------
 import os
+import sys
 from   pathlib import Path
 import shutil
 
@@ -10,17 +11,25 @@ from   utils   import extract_title, markdown_to_html_node
 
 #---[ Main Function ]-----------------------------------------------------------
 def main():
-    remove_public_dir_files()
+    basepath = "/"
+    if len(sys.argv) > 1:
+        basepath = sys.argv[1]
+
+    # remove_public_dir_files()
 
     static_dir = get_project_dir("static")
-    public_dir = get_project_dir("public")
-    copy_files(static_dir, public_dir)
+    # public_dir = get_project_dir("public")
+    docs_dir = get_project_dir("docs")
+    
+    remove_files(docs_dir)
+
+    copy_files(static_dir, docs_dir)
 
     content_dir  = get_project_dir("content")
     template_dir = get_project_dir(".") / "template.html"
 
     print("")
-    generate_pages_recursively(content_dir, template_dir, public_dir)
+    generate_pages_recursively(content_dir, template_dir, docs_dir, basepath)
 
     return
 
@@ -66,7 +75,7 @@ def remove_public_dir_files() -> None:
 
     return
 
-def generate_page(src_path: Path, template_path: Path, dest_path: Path) -> bool:
+def generate_page(src_path: Path, template_path: Path, dest_path: Path, basepath: str) -> bool:
     short_src_path      = f"{src_path.parent.parent.name}/{src_path.parent.name}/{src_path.name}"
     short_template_path = f"{template_path.parent.parent.name}/{template_path.parent.name}/{template_path.name}"
     short_dest_path     = f"{dest_path.parent.parent.name}/{dest_path.parent.name}/{dest_path.name}"
@@ -96,22 +105,27 @@ def generate_page(src_path: Path, template_path: Path, dest_path: Path) -> bool:
     html_str = template.replace("{{ Title }}", title)
     html_str = html_str.replace("{{ Content }}", content)
 
+    while html_str.find("href=\"/") != -1:
+        html_str = html_str.replace("href=\"/", "href=\"{basepath}")
+    while html_str.find("src=\"/") != -1:
+        html_str = html_str.replace("src=\"/", "src=\"{basepath}")
+
     with dest_path.open('w') as outFile:
         outFile.write(html_str)
 
     return True
 
-def generate_pages_recursively(content_path: Path, template_path: Path, dest_path: Path) -> None:
+def generate_pages_recursively(content_path: Path, template_path: Path, dest_path: Path, basepath: str) -> None:
     for path in content_path.iterdir():
         if path.is_dir():
             new_dest = dest_path / path.name
             if not new_dest.exists():
                 new_dest.mkdir()
 
-            generate_pages_recursively(path, template_path, new_dest)
+            generate_pages_recursively(path, template_path, new_dest, basepath)
         elif path.name.endswith(".md"):
             file_dest_path = dest_path / str(path.name).replace(".md", ".html")
-            generate_page(path, template_path, file_dest_path)
+            generate_page(path, template_path, file_dest_path, basepath)
 
     return
 
