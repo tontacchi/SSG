@@ -18,7 +18,6 @@ def main():
     # remove_public_dir_files()
 
     static_dir = get_project_dir("static")
-    # public_dir = get_project_dir("public")
     docs_dir = get_project_dir("docs")
     
     remove_files(docs_dir)
@@ -69,12 +68,6 @@ def copy_files(source_dir: Path, target_dir: Path) -> None:
 
     return
 
-def remove_public_dir_files() -> None:
-    public_dir = get_project_dir("public")
-    remove_files(public_dir)
-
-    return
-
 def generate_page(src_path: Path, template_path: Path, dest_path: Path, basepath: str) -> bool:
     short_src_path      = f"{src_path.parent.parent.name}/{src_path.parent.name}/{src_path.name}"
     short_template_path = f"{template_path.parent.parent.name}/{template_path.parent.name}/{template_path.name}"
@@ -105,10 +98,20 @@ def generate_page(src_path: Path, template_path: Path, dest_path: Path, basepath
     html_str = template.replace("{{ Title }}", title)
     html_str = html_str.replace("{{ Content }}", content)
 
-    while html_str.find("href=\"/") != -1:
-        html_str = html_str.replace("href=\"/", "href=\"{basepath}")
-    while html_str.find("src=\"/") != -1:
-        html_str = html_str.replace("src=\"/", "src=\"{basepath}")
+    match_str = "href=\"/"
+    sub_str = "href=\"{basepath}"
+    while html_str.find(match_str) != -1:
+        html_str = html_str.replace(match_str, sub_str)
+
+    match_str = "src=\"/"
+    sub_str = "src=\"{basepath}"
+    while html_str.find(match_str) != -1:
+        html_str = html_str.replace(match_str, sub_str)
+
+    match_str = "{basepath}"
+    sub_str = f"{basepath}"
+    while html_str.find(match_str) != -1:
+        html_str = html_str.replace(match_str, sub_str)
 
     with dest_path.open('w') as outFile:
         outFile.write(html_str)
